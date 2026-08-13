@@ -105,8 +105,19 @@
 </dependency>
 <dependency>
     <groupId>io.grpc</groupId>
-    <artifactId>grpc-netty-shaded</artifactId>
-    <version>1.75.0</version>
+    <artifactId>grpc-api</artifactId>
+    <version>1.80.0</version>
+</dependency>
+<dependency>
+    <groupId>com.google.protobuf</groupId>
+    <artifactId>protobuf-java</artifactId>
+    <version>4.31.1</version>
+</dependency>
+
+<dependency>
+    <groupId>com.google.guava</groupId>
+    <artifactId>guava</artifactId>
+    <version>33.4.8-jre</version>
 </dependency>
 	</dependencies>
 

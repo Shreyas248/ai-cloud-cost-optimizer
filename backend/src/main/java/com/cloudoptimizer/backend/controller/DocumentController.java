@@ -3,6 +3,7 @@ package com.cloudoptimizer.backend.controller;
 import com.cloudoptimizer.backend.model.DocumentChunk;
 import com.cloudoptimizer.backend.service.DocumentExtractionService;
 import com.cloudoptimizer.backend.service.EmbeddingService;
+import com.cloudoptimizer.backend.service.QdrantService;
 import com.cloudoptimizer.backend.service.TextChunkerService;
 
 import org.springframework.http.HttpStatus;
@@ -31,11 +32,14 @@ public class DocumentController {
 
     private final EmbeddingService embeddingService;
 
+    private final QdrantService qdrantService;
+
 
     public DocumentController(
             DocumentExtractionService extractionService,
             TextChunkerService textChunkerService,
-            EmbeddingService embeddingService
+            EmbeddingService embeddingService,
+            QdrantService qdrantService
     ) {
 
         this.extractionService =
@@ -46,6 +50,9 @@ public class DocumentController {
 
         this.embeddingService =
                 embeddingService;
+
+        this.qdrantService =
+                qdrantService;
 
 
         this.uploadDirectory =
@@ -335,7 +342,7 @@ public class DocumentController {
 
 
     // =========================================================
-    // 4. GENERATE EMBEDDINGS
+    // 4. GENERATE EMBEDDINGS + STORE IN QDRANT
     // =========================================================
 
     @PostMapping("/embed")
@@ -369,6 +376,7 @@ public class DocumentController {
 
 
             // Step 3: Generate embeddings
+            // and store them in Qdrant
             List<Map<String, Object>> embeddings =
                     new ArrayList<>();
 
@@ -381,6 +389,16 @@ public class DocumentController {
                         );
 
 
+                // Store embedding in Qdrant
+                qdrantService.storeEmbedding(
+                        vector,
+                        chunk.getContent(),
+                        chunk.getChunkIndex(),
+                        file.getOriginalFilename()
+                );
+
+
+                // Add information to response
                 embeddings.add(
                         Map.of(
                                 "chunkIndex",

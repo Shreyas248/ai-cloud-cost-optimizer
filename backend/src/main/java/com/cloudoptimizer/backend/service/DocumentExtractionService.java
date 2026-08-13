@@ -1,7 +1,6 @@
 package com.cloudoptimizer.backend.service;
 
 import org.apache.pdfbox.Loader;
-import com.cloudoptimizer.backend.service.DocumentExtractionService;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.text.PDFTextStripper;
 import org.springframework.stereotype.Service;
@@ -13,30 +12,56 @@ import java.nio.charset.StandardCharsets;
 @Service
 public class DocumentExtractionService {
 
-    public String extractText(
-            MultipartFile file
-    ) throws IOException {
+    public String extractText(MultipartFile file) throws IOException {
 
         String filename = file.getOriginalFilename();
 
         if (filename == null || filename.isBlank()) {
             throw new IllegalArgumentException(
-                    "Invalid filename"
+                    "File name is missing"
             );
         }
 
-        String extension = getExtension(filename);
+        String extension =
+                filename.substring(
+                        filename.lastIndexOf('.') + 1
+                ).toLowerCase();
 
-        if ("pdf".equals(extension)) {
-            return extractPdf(file);
+        switch (extension) {
+
+            case "txt":
+                return extractTxt(file);
+
+            case "csv":
+                return extractCsv(file);
+
+            case "pdf":
+                return extractPdf(file);
+
+            default:
+                throw new IllegalArgumentException(
+                        "Unsupported file type: " + extension
+                );
         }
+    }
 
-        if ("csv".equals(extension)) {
-            return extractCsv(file);
-        }
+    private String extractTxt(
+            MultipartFile file
+    ) throws IOException {
 
-        throw new IllegalArgumentException(
-                "Unsupported file type: " + extension
+        return new String(
+                file.getBytes(),
+                StandardCharsets.UTF_8
+        );
+    }
+
+    private String extractCsv(
+            MultipartFile file
+    ) throws IOException {
+
+        return new String(
+                file.getBytes(),
+                StandardCharsets.UTF_8
         );
     }
 
@@ -44,43 +69,15 @@ public class DocumentExtractionService {
             MultipartFile file
     ) throws IOException {
 
-        byte[] fileBytes = file.getBytes();
-
-        try (PDDocument document =
-                     Loader.loadPDF(fileBytes)) {
+        try (
+                PDDocument document =
+                        Loader.loadPDF(file.getBytes())
+        ) {
 
             PDFTextStripper stripper =
                     new PDFTextStripper();
 
             return stripper.getText(document);
         }
-    }
-
-    private String extractCsv(
-            MultipartFile file
-    ) throws IOException {
-
-        byte[] fileBytes = file.getBytes();
-
-        return new String(
-                fileBytes,
-                StandardCharsets.UTF_8
-        );
-    }
-
-    private String getExtension(
-            String filename
-    ) {
-
-        int lastDot =
-                filename.lastIndexOf(".");
-
-        if (lastDot == -1) {
-            return "";
-        }
-
-        return filename
-                .substring(lastDot + 1)
-                .toLowerCase();
     }
 }

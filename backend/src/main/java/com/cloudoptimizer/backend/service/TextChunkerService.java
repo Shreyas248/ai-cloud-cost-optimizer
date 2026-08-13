@@ -10,58 +10,197 @@ import java.util.List;
 public class TextChunkerService {
 
     private static final int CHUNK_SIZE = 500;
+    private static final int CHUNK_OVERLAP = 50;
 
-    private static final int CHUNK_OVERLAP = 100;
+    public List<DocumentChunk> chunkText(String text) {
 
-    public List<DocumentChunk> chunkText(
-            String text
-    ) {
-
-        List<DocumentChunk> chunks =
-                new ArrayList<>();
+        List<DocumentChunk> chunks = new ArrayList<>();
 
         if (text == null || text.isBlank()) {
             return chunks;
         }
 
-        text = text.trim();
+        // Normalize line endings and whitespace
+        text = text.replace("\r\n", "\n")
+                   .replace("\r", "\n")
+                   .trim();
 
-        int start = 0;
+        // Split into paragraphs
+        String[] paragraphs = text.split("\\n\\s*\\n");
 
-        int chunkIndex = 0;
+        StringBuilder currentChunk = new StringBuilder();
 
-        while (start < text.length()) {
+        for (String paragraph : paragraphs) {
 
-            int end =
-                    Math.min(
-                            start + CHUNK_SIZE,
-                            text.length()
+            paragraph = paragraph.trim();
+
+            if (paragraph.isEmpty()) {
+                continue;
+            }
+
+            // If adding the paragraph keeps us within the target size
+            if (currentChunk.length() + paragraph.length() + 2 <= CHUNK_SIZE) {
+
+                if (!currentChunk.isEmpty()) {
+                    currentChunk.append("\n\n");
+                }
+
+                currentChunk.append(paragraph);
+
+            } else {
+
+                // Save current chunk
+                if (!currentChunk.isEmpty()) {
+
+                    chunks.add(
+                            new DocumentChunk(
+                                    chunks.size(),
+                                    currentChunk.toString().trim()
+                            )
                     );
+                }
 
-            String chunk =
-                    text.substring(start, end)
-                            .trim();
+                // Handle paragraphs larger than CHUNK_SIZE
+                if (paragraph.length() > CHUNK_SIZE) {
 
-            if (!chunk.isBlank()) {
+                    List<String> smallerParts =
+                            splitLargeParagraph(paragraph);
 
-                chunks.add(
-                        new DocumentChunk(
-                                chunkIndex,
-                                chunk
-                        )
-                );
+                    for (String part : smallerParts) {
 
-                chunkIndex++;
+                        chunks.add(
+                                new DocumentChunk(
+                                        chunks.size(),
+                                        part
+                            )
+                        );
+                    }
+
+                    currentChunk.setLength(0);
+
+                } else {
+
+                    currentChunk.setLength(0);
+                    currentChunk.append(paragraph);
+                }
             }
+        }
 
-            if (end >= text.length()) {
-                break;
-            }
+        // Add remaining text
+        if (!currentChunk.isEmpty()) {
 
-            start =
-                    end - CHUNK_OVERLAP;
+            chunks.add(
+                    new DocumentChunk(
+                            chunks.size(),
+                            currentChunk.toString().trim()
+                    )
+            );
         }
 
         return chunks;
+    }
+
+    private List<String> splitLargeParagraph(String paragraph) {
+
+        List<String> parts = new ArrayList<>();
+
+        // First try to split by sentences
+        String[] sentences =
+                paragraph.split("(?<=[.!?])\\s+");
+
+        StringBuilder current = new StringBuilder();
+
+        for (String sentence : sentences) {
+
+            sentence = sentence.trim();
+
+            if (sentence.isEmpty()) {
+                continue;
+            }
+
+            if (current.length() + sentence.length() + 1 <= CHUNK_SIZE) {
+
+                if (!current.isEmpty()) {
+                    current.append(" ");
+                }
+
+                current.append(sentence);
+
+            } else {
+
+                if (!current.isEmpty()) {
+
+                    parts.add(current.toString().trim());
+                }
+
+                current.setLength(0);
+                current.append(sentence);
+            }
+        }
+
+        if (!current.isEmpty()) {
+            parts.add(current.toString().trim());
+        }
+
+        // Safety fallback for extremely long sentences
+        List<String> finalParts = new ArrayList<>();
+
+        for (String part : parts) {
+
+            if (part.length() <= CHUNK_SIZE) {
+
+                finalParts.add(part);
+
+            } else {
+
+                finalParts.addAll(
+                        splitByWords(part)
+                );
+            }
+        }
+
+        return finalParts;
+    }
+
+    private List<String> splitByWords(String text) {
+
+        List<String> parts = new ArrayList<>();
+
+        String[] words = text.split("\\s+");
+
+        StringBuilder current = new StringBuilder();
+
+        for (String word : words) {
+
+            if (current.length() + word.length() + 1 <= CHUNK_SIZE) {
+
+                if (!current.isEmpty()) {
+                    current.append(" ");
+                }
+
+                current.append(word);
+
+            } else {
+
+                if (!current.isEmpty()) {
+
+                    parts.add(
+                            current.toString().trim()
+                    );
+                }
+
+                current.setLength(0);
+                current.append(word);
+            }
+        }
+
+        if (!current.isEmpty()) {
+
+            parts.add(
+                    current.toString().trim()
+            );
+        }
+
+        return parts;
     }
 }

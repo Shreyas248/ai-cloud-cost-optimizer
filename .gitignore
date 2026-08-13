@@ -1,17 +1,20 @@
-# Maven
+# Java / Maven
 backend/target/
+*.class
 
-# Environment variables / secrets
+# Environment / secrets
 .env
 *.env
+backend/.env
 
-# Uploaded documents
+# Application uploads
 backend/uploads/
+uploads/
 
 # IDE
 .idea/
-*.iml
 .vscode/
+*.iml
 
 # OS
 .DS_Store
@@ -19,3 +22,14 @@ Thumbs.db
 
 # Logs
 *.log
+
+# Node
+frontend/node_modules/
+frontend/dist/
+
+# Local data
+*.csv
+*.txt
+
+# Docker
+*.pid
