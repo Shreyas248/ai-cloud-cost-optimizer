@@ -5,9 +5,12 @@ import io.qdrant.client.grpc.Collections;
 import io.qdrant.client.grpc.Points;
 import jakarta.annotation.PostConstruct;
 
+import com.cloudoptimizer.backend.dto.SearchResult;
+
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -39,6 +42,9 @@ public class QdrantService {
         createCollectionIfNotExists();
     }
 
+    /*
+     * Create collection if it doesn't already exist.
+     */
     public void createCollectionIfNotExists() {
 
         try {
@@ -84,6 +90,9 @@ public class QdrantService {
         }
     }
 
+    /*
+     * Store an embedding and its metadata in Qdrant.
+     */
     public void storeEmbedding(
             float[] vector,
             String content,
@@ -95,13 +104,15 @@ public class QdrantService {
 
             // Convert float[] to List<Float>
             List<Float> vectorList =
-                    new java.util.ArrayList<>();
+                    new ArrayList<>();
 
-            for (float value : vector) {
-                vectorList.add(value);
+            for (float vectorValue : vector) {
+                vectorList.add(vectorValue);
             }
 
-            // Create Qdrant point
+            /*
+             * Create Qdrant point.
+             */
             Points.PointStruct point =
                     Points.PointStruct.newBuilder()
 
@@ -113,13 +124,23 @@ public class QdrantService {
                                     vectors(vectorList)
                             )
 
+                            /*
+                             * Store chunkIndex as STRING.
+                             *
+                             * This avoids protobuf number
+                             * compatibility problems.
+                             */
                             .putAllPayload(
                                     Map.of(
                                             "content",
                                             value(content),
 
                                             "chunkIndex",
-                                            value(chunkIndex),
+                                            value(
+                                                    String.valueOf(
+                                                            chunkIndex
+                                                    )
+                                            ),
 
                                             "filename",
                                             value(filename)
@@ -128,7 +149,9 @@ public class QdrantService {
 
                             .build();
 
-            // Store point in Qdrant
+            /*
+             * Store point in Qdrant.
+             */
             qdrantClient
                     .upsertAsync(
                             collectionName,
@@ -140,6 +163,134 @@ public class QdrantService {
 
             throw new RuntimeException(
                     "Failed to store embedding in Qdrant",
+                    e
+            );
+        }
+    }
+
+    /*
+     * Semantic search.
+     *
+     * Takes the embedding of the user's question
+     * and returns the most relevant document chunks.
+     */
+    public List<SearchResult> searchSimilar(
+            float[] queryVector,
+            int limit
+    ) {
+
+        try {
+
+            // Convert float[] to List<Float>
+            List<Float> vectorList =
+                    new ArrayList<>();
+
+            for (float vectorValue : queryVector) {
+                vectorList.add(vectorValue);
+            }
+
+            /*
+             * Search Qdrant for vectors closest
+             * to the user's query.
+             */
+            List<Points.ScoredPoint> results =
+                    qdrantClient
+                            .searchAsync(
+                                    Points.SearchPoints.newBuilder()
+                                            .setCollectionName(
+                                                    collectionName
+                                            )
+                                            .addAllVector(
+                                                    vectorList
+                                            )
+                                            .setLimit(limit)
+                                            .setWithPayload(
+                                                    Points.WithPayloadSelector
+                                                            .newBuilder()
+                                                            .setEnable(true)
+                                                            .build()
+                                            )
+                                            .build()
+                            )
+                            .get();
+
+            List<SearchResult> searchResults =
+                    new ArrayList<>();
+
+            /*
+             * Process every Qdrant result.
+             */
+            for (Points.ScoredPoint result : results) {
+
+                String content = "";
+
+                String filename = "";
+
+                int chunkIndex = -1;
+
+                // -----------------------------
+                // Get content
+                // -----------------------------
+                if (result.containsPayload("content")) {
+
+                    content =
+                            result
+                                    .getPayloadOrThrow("content")
+                                    .getStringValue();
+                }
+
+                // -----------------------------
+                // Get filename
+                // -----------------------------
+                if (result.containsPayload("filename")) {
+
+                    filename =
+                            result
+                                    .getPayloadOrThrow("filename")
+                                    .getStringValue();
+                }
+
+                // -----------------------------
+                // Get chunkIndex
+                // -----------------------------
+                if (result.containsPayload("chunkIndex")) {
+
+                    try {
+
+                        chunkIndex =
+                                Integer.parseInt(
+                                        result
+                                                .getPayloadOrThrow(
+                                                        "chunkIndex"
+                                                )
+                                                .getStringValue()
+                                );
+
+                    } catch (Exception e) {
+
+                        chunkIndex = -1;
+                    }
+                }
+
+                /*
+                 * Create SearchResult.
+                 */
+                searchResults.add(
+                        new SearchResult(
+                                content,
+                                result.getScore(),
+                                chunkIndex,
+                                filename
+                        )
+                );
+            }
+
+            return searchResults;
+
+        } catch (Exception e) {
+
+            throw new RuntimeException(
+                    "Failed to search Qdrant",
                     e
             );
         }

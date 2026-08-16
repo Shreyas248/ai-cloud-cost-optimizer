@@ -30,11 +30,7 @@ const navigationItems = [
         path: "/costs",
         icon: DollarSign,
     },
-    {
-        name: "Recommendations",
-        path: "/recommendations",
-        icon: Lightbulb,
-    },
+    
     {
         name: "Anomalies",
         path: "/anomalies",

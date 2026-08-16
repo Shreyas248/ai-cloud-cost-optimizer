@@ -1,9 +1,11 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
+
 import Documents from "./pages/Documents";
+import Dashboard from "./pages/Dashboard";
+import Chat from "./pages/Chat";
 import Navbar from "./components/Navbar";
 import Sidebar from "./components/Sidebar";
 
-import Dashboard from "./pages/Dashboard";
 
 function PlaceholderPage({ title }) {
     return (
@@ -17,7 +19,9 @@ function PlaceholderPage({ title }) {
     );
 }
 
+
 function App() {
+
     return (
         <BrowserRouter>
 
@@ -31,24 +35,39 @@ function App() {
 
                     <Routes>
 
+                        {/* =========================
+                            DASHBOARD
+                        ========================= */}
+
                         <Route
                             path="/"
                             element={<Dashboard />}
                         />
+
+
+                        {/* =========================
+                            DOCUMENTS
+                        ========================= */}
 
                         <Route
                             path="/documents"
                             element={<Documents />}
                         />
 
+
+                        {/* =========================
+                            RAG CHAT
+                        ========================= */}
+
                         <Route
-                            path="/chat"
-                            element={
-                                <PlaceholderPage
-                                    title="RAG Chat"
-                                />
-                            }
+                        path="/chat"
+                        element={<Chat />}
                         />
+
+
+                        {/* =========================
+                            CLOUD COSTS
+                        ========================= */}
 
                         <Route
                             path="/costs"
@@ -59,14 +78,12 @@ function App() {
                             }
                         />
 
-                        <Route
-                            path="/recommendations"
-                            element={
-                                <PlaceholderPage
-                                    title="AI Recommendations"
-                                />
-                            }
-                        />
+
+                       
+
+                        {/* =========================
+                            ANOMALY DETECTION
+                        ========================= */}
 
                         <Route
                             path="/anomalies"
