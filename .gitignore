@@ -1,43 +1,68 @@
 # =========================
 # Java / Maven
 # =========================
+
 target/
 *.class
-*.log
 
 # =========================
-# Spring Boot / Environment
+# IntelliJ
 # =========================
+
+.idea/
+*.iml
+
+# =========================
+# VS Code
+# =========================
+
+.vscode/
+
+# =========================
+# Environment / Secrets
+# =========================
+
 .env
 .env.*
 !.env.example
-application-local.properties
-application-prod.properties
 
 # =========================
-# React / Node
+# Logs
 # =========================
-node_modules/
-dist/
-build/
-npm-debug.log*
-yarn-debug.log*
-pnpm-debug.log*
+
+*.log
+logs/
 
 # =========================
-# IDE
+# Local uploads
 # =========================
-.idea/
-.vscode/
-*.iml
+
+uploads/
 
 # =========================
 # OS
 # =========================
+
 .DS_Store
 Thumbs.db
 
 # =========================
-# Uploaded/generated files
+# Node
 # =========================
-uploads/
+
+node_modules/
+dist/
+
+# =========================
+# Build
+# =========================
+
+build/
+
+# =========================
+# IDE
+# =========================
+
+.classpath
+.project
+.settings/

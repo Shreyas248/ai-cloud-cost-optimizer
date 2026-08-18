@@ -1,0 +1,424 @@
+
+.anomalies-page {
+    width: 100%;
+    padding: 32px;
+    box-sizing: border-box;
+}
+
+/* =====================================================
+   HEADER
+===================================================== */
+
+.anomalies-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 24px;
+    margin-bottom: 30px;
+}
+
+.anomalies-header-left {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+
+.anomalies-header-icon {
+    width: 58px;
+    height: 58px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 16px;
+    background: #eef2ff;
+    color: #4f46e5;
+}
+
+.anomalies-header h1 {
+    margin: 0;
+    font-size: 28px;
+    font-weight: 700;
+    color: #111827;
+}
+
+.anomalies-header p {
+    margin: 6px 0 0;
+    color: #6b7280;
+    font-size: 14px;
+    line-height: 1.5;
+}
+
+/* =====================================================
+   REFRESH BUTTON
+===================================================== */
+
+.anomaly-refresh-button {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    border: none;
+    border-radius: 10px;
+    padding: 11px 16px;
+    background: #4f46e5;
+    color: white;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: 0.2s ease;
+}
+
+.anomaly-refresh-button:hover {
+    background: #4338ca;
+    transform: translateY(-1px);
+}
+
+.anomaly-refresh-button:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    transform: none;
+}
+
+/* =====================================================
+   ERROR
+===================================================== */
+
+.anomaly-error {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 14px 16px;
+    margin-bottom: 24px;
+    border-radius: 12px;
+    background: #fef2f2;
+    border: 1px solid #fecaca;
+    color: #b91c1c;
+}
+
+/* =====================================================
+   STATISTICS
+===================================================== */
+
+.anomaly-stats-grid {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 20px;
+    margin-bottom: 28px;
+}
+
+.anomaly-stat-card {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    padding: 22px;
+    background: white;
+    border: 1px solid #e5e7eb;
+    border-radius: 16px;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.04);
+}
+
+.anomaly-stat-icon {
+    width: 48px;
+    height: 48px;
+    border-radius: 13px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.anomaly-stat-icon.total {
+    background: #eef2ff;
+    color: #4f46e5;
+}
+
+.anomaly-stat-icon.critical {
+    background: #fef2f2;
+    color: #dc2626;
+}
+
+.anomaly-stat-icon.high {
+    background: #fff7ed;
+    color: #ea580c;
+}
+
+.anomaly-stat-icon.medium {
+    background: #fffbeb;
+    color: #d97706;
+}
+
+.anomaly-stat-card div:last-child {
+    display: flex;
+    flex-direction: column;
+}
+
+.anomaly-stat-card span {
+    font-size: 13px;
+    color: #6b7280;
+    margin-bottom: 5px;
+}
+
+.anomaly-stat-card strong {
+    font-size: 25px;
+    color: #111827;
+    line-height: 1.2;
+}
+
+.anomaly-stat-card small {
+    margin-top: 5px;
+    font-size: 11px;
+    color: #9ca3af;
+}
+
+/* =====================================================
+   MAIN CARD
+===================================================== */
+
+.anomalies-card {
+    background: white;
+    border: 1px solid #e5e7eb;
+    border-radius: 18px;
+    overflow: hidden;
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.04);
+}
+
+.anomalies-card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 24px;
+    border-bottom: 1px solid #e5e7eb;
+}
+
+.anomalies-card-header h2 {
+    margin: 0;
+    color: #111827;
+    font-size: 19px;
+}
+
+.anomalies-card-header p {
+    margin: 5px 0 0;
+    color: #6b7280;
+    font-size: 13px;
+}
+
+.anomaly-count-badge {
+    padding: 7px 12px;
+    border-radius: 999px;
+    background: #eef2ff;
+    color: #4f46e5;
+    font-size: 12px;
+    font-weight: 600;
+}
+
+/* =====================================================
+   TABLE
+===================================================== */
+
+.anomaly-table-wrapper {
+    width: 100%;
+    overflow-x: auto;
+}
+
+.anomaly-table {
+    width: 100%;
+    border-collapse: collapse;
+    min-width: 950px;
+}
+
+.anomaly-table th {
+    padding: 14px 20px;
+    background: #f9fafb;
+    border-bottom: 1px solid #e5e7eb;
+    text-align: left;
+    color: #6b7280;
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.anomaly-table td {
+    padding: 18px 20px;
+    border-bottom: 1px solid #f1f5f9;
+    color: #374151;
+    font-size: 13px;
+    vertical-align: middle;
+}
+
+.anomaly-table tbody tr {
+    transition: background 0.2s ease;
+}
+
+.anomaly-table tbody tr:hover {
+    background: #fafafa;
+}
+
+.anomaly-table tbody tr:last-child td {
+    border-bottom: none;
+}
+
+/* =====================================================
+   SERVICE
+===================================================== */
+
+.service-name {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: #374151;
+    font-weight: 600;
+}
+
+.service-name svg {
+    color: #4f46e5;
+}
+
+/* =====================================================
+   INCREASE
+===================================================== */
+
+.increase-value {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    color: #dc2626;
+    font-weight: 700;
+}
+
+/* =====================================================
+   SEVERITY
+===================================================== */
+
+.severity-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 7px 10px;
+    border-radius: 999px;
+    font-size: 11px;
+    font-weight: 700;
+}
+
+.severity-badge.critical {
+    background: #fef2f2;
+    color: #dc2626;
+}
+
+.severity-badge.high {
+    background: #fff7ed;
+    color: #ea580c;
+}
+
+.severity-badge.medium {
+    background: #fffbeb;
+    color: #d97706;
+}
+
+.anomaly-message {
+    max-width: 350px;
+    color: #6b7280 !important;
+    line-height: 1.5;
+}
+
+/* =====================================================
+   LOADING
+===================================================== */
+
+.anomalies-loading {
+    min-height: 280px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 15px;
+    color: #6b7280;
+}
+
+.spin {
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+
+    from {
+        transform: rotate(0deg);
+    }
+
+    to {
+        transform: rotate(360deg);
+    }
+
+}
+
+/* =====================================================
+   EMPTY STATE
+===================================================== */
+
+.anomalies-empty {
+    min-height: 320px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 30px;
+}
+
+.empty-icon {
+    width: 75px;
+    height: 75px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    background: #f0fdf4;
+    color: #16a34a;
+    margin-bottom: 18px;
+}
+
+.anomalies-empty h3 {
+    margin: 0;
+    color: #111827;
+    font-size: 19px;
+}
+
+.anomalies-empty p {
+    max-width: 400px;
+    margin: 8px 0 0;
+    color: #6b7280;
+    font-size: 14px;
+    line-height: 1.6;
+}
+
+/* =====================================================
+   RESPONSIVE
+===================================================== */
+
+@media (max-width: 1100px) {
+
+    .anomaly-stats-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+}
+
+@media (max-width: 700px) {
+
+    .anomalies-page {
+        padding: 20px;
+    }
+
+    .anomalies-header {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+
+    .anomaly-stats-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .anomalies-header h1 {
+        font-size: 23px;
+    }
+
+}
+

@@ -1,39 +1,86 @@
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import {
+    BrowserRouter,
+    Routes,
+    Route,
+    Navigate,
+} from "react-router-dom";
 
 import Documents from "./pages/Documents";
 import Dashboard from "./pages/Dashboard";
 import Chat from "./pages/Chat";
+import CloudCosts from "./pages/CloudCosts";
+import Anomalies from "./pages/Anomalies";
+
+import Login from "./pages/Login";
+import Register from "./pages/Register";
+
 import Navbar from "./components/Navbar";
 import Sidebar from "./components/Sidebar";
 
 
-function PlaceholderPage({ title }) {
-    return (
-        <div className="placeholder-page">
-            <h1>{title}</h1>
+// ==========================================
+// PROTECTED ROUTE
+// ==========================================
 
-            <p>
-                This module will be implemented in a later step.
-            </p>
-        </div>
-    );
+function ProtectedRoute({ children }) {
+
+    const token =
+        localStorage.getItem("token");
+
+    if (!token) {
+
+        return (
+            <Navigate
+                to="/login"
+                replace
+            />
+        );
+    }
+
+    return children;
+
 }
 
 
-function App() {
+// ==========================================
+// MAIN APP LAYOUT
+// ==========================================
+
+function AppLayout() {
 
     return (
-        <BrowserRouter>
+
+        <>
+
+            {/* ======================================
+                TOP NAVBAR
+            ====================================== */}
 
             <Navbar />
 
+
+            {/* ======================================
+                MAIN APPLICATION LAYOUT
+            ====================================== */}
+
             <div className="application-layout">
 
+
+                {/* ==================================
+                    SIDEBAR
+                ================================== */}
+
                 <Sidebar />
+
+
+                {/* ==================================
+                    PAGE CONTENT
+                ================================== */}
 
                 <main className="main-content">
 
                     <Routes>
+
 
                         {/* =========================
                             DASHBOARD
@@ -60,8 +107,8 @@ function App() {
                         ========================= */}
 
                         <Route
-                        path="/chat"
-                        element={<Chat />}
+                            path="/chat"
+                            element={<Chat />}
                         />
 
 
@@ -70,26 +117,31 @@ function App() {
                         ========================= */}
 
                         <Route
-                            path="/costs"
-                            element={
-                                <PlaceholderPage
-                                    title="Cloud Costs"
-                                />
-                            }
+                            path="/cloud-costs"
+                            element={<CloudCosts />}
                         />
 
 
-                       
-
                         {/* =========================
-                            ANOMALY DETECTION
+                            ANOMALIES
                         ========================= */}
 
                         <Route
                             path="/anomalies"
+                            element={<Anomalies />}
+                        />
+
+
+                        {/* =========================
+                            FALLBACK
+                        ========================= */}
+
+                        <Route
+                            path="*"
                             element={
-                                <PlaceholderPage
-                                    title="Anomaly Detection"
+                                <Navigate
+                                    to="/"
+                                    replace
                                 />
                             }
                         />
@@ -100,8 +152,71 @@ function App() {
 
             </div>
 
-        </BrowserRouter>
+        </>
+
     );
+
 }
 
+
+// ==========================================
+// APP
+// ==========================================
+
+function App() {
+
+    return (
+
+        <BrowserRouter>
+
+            <Routes>
+
+
+                {/* ==================================
+                    LOGIN
+                ================================== */}
+
+                <Route
+                    path="/login"
+                    element={<Login />}
+                />
+
+
+                {/* ==================================
+                    REGISTER
+                ================================== */}
+
+                <Route
+                    path="/register"
+                    element={<Register />}
+                />
+
+
+                {/* ==================================
+                    PROTECTED APPLICATION
+                ================================== */}
+
+                <Route
+                    path="/*"
+                    element={
+
+                        <ProtectedRoute>
+
+                            <AppLayout />
+
+                        </ProtectedRoute>
+
+                    }
+                />
+
+            </Routes>
+
+        </BrowserRouter>
+
+    );
+
+}
+
+
 export default App;
+

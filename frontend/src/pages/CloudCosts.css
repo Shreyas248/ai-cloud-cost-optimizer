@@ -1,0 +1,417 @@
+.cloud-costs-page {
+    padding: 42px 36px;
+    min-height: calc(100vh - 66px);
+    background: #f5f7fb;
+    box-sizing: border-box;
+}
+
+/* ==========================================
+   HEADER
+========================================== */
+
+.cloud-costs-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 30px;
+}
+
+.cloud-costs-header h1 {
+    margin: 0;
+    font-size: 32px;
+    font-weight: 700;
+    color: #0f172a;
+}
+
+.cloud-costs-header p {
+    margin: 8px 0 0;
+    color: #64748b;
+    font-size: 16px;
+}
+
+.cloud-refresh-button {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    border: none;
+    background: #4f46e5;
+    color: white;
+    padding: 11px 17px;
+    border-radius: 10px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: 0.2s ease;
+}
+
+.cloud-refresh-button:hover {
+    background: #4338ca;
+    transform: translateY(-1px);
+}
+
+.cloud-refresh-button:active {
+    transform: translateY(0);
+}
+
+/* ==========================================
+   SUMMARY
+========================================== */
+
+.cloud-summary-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 18px;
+    margin-bottom: 24px;
+}
+
+.cloud-summary-card {
+    background: white;
+    border: 1px solid #e8edf5;
+    border-radius: 16px;
+    padding: 21px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    box-shadow: 0 3px 14px rgba(15, 23, 42, 0.04);
+}
+
+.cloud-summary-icon {
+    width: 48px;
+    height: 48px;
+    min-width: 48px;
+    border-radius: 13px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.cloud-summary-icon.blue {
+    background: #eef2ff;
+    color: #4f46e5;
+}
+
+.cloud-summary-icon.purple {
+    background: #f3e8ff;
+    color: #7c3aed;
+}
+
+.cloud-summary-icon.green {
+    background: #ecfdf5;
+    color: #059669;
+}
+
+.cloud-summary-icon.orange {
+    background: #fff7ed;
+    color: #ea580c;
+}
+
+.cloud-summary-card span {
+    display: block;
+    font-size: 11px;
+    font-weight: 700;
+    color: #94a3b8;
+    letter-spacing: 0.7px;
+}
+
+.cloud-summary-card strong {
+    display: block;
+    margin-top: 5px;
+    font-size: 24px;
+    color: #0f172a;
+}
+
+.cloud-summary-card p {
+    margin: 4px 0 0;
+    font-size: 12px;
+    color: #94a3b8;
+}
+
+/* ==========================================
+   CHARTS
+========================================== */
+
+.cloud-charts-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 22px;
+    margin-bottom: 24px;
+}
+
+.cloud-chart-card,
+.cloud-table-card {
+    background: white;
+    border: 1px solid #e8edf5;
+    border-radius: 17px;
+    box-shadow: 0 3px 14px rgba(15, 23, 42, 0.04);
+    overflow: hidden;
+}
+
+.cloud-chart-card {
+    min-height: 400px;
+}
+
+.cloud-chart-header,
+.cloud-table-header {
+    padding: 22px 24px;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    border-bottom: 1px solid #eef2f7;
+}
+
+.cloud-chart-header h2,
+.cloud-table-header h2 {
+    margin: 0;
+    font-size: 18px;
+    color: #0f172a;
+}
+
+.cloud-chart-header p,
+.cloud-table-header p {
+    margin: 6px 0 0;
+    font-size: 13px;
+    color: #94a3b8;
+}
+
+.cloud-chart-header > svg,
+.cloud-table-header > svg {
+    color: #64748b;
+}
+
+.cloud-chart-container {
+    width: 100%;
+    height: 315px;
+    padding: 20px 10px 10px 0;
+    box-sizing: border-box;
+}
+
+/* ==========================================
+   EMPTY STATE
+========================================== */
+
+.cloud-empty {
+    height: 315px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    color: #94a3b8;
+    gap: 10px;
+}
+
+.cloud-empty svg {
+    color: #cbd5e1;
+}
+
+.cloud-empty p {
+    margin: 0;
+    font-size: 14px;
+}
+
+.table-empty {
+    height: 250px;
+}
+
+.table-empty h3 {
+    margin: 2px 0 0;
+    color: #475569;
+}
+
+.table-empty p {
+    margin: 0;
+    color: #94a3b8;
+}
+
+/* ==========================================
+   TABLE
+========================================== */
+
+.cloud-table-card {
+    margin-bottom: 30px;
+}
+
+.cloud-table-wrapper {
+    overflow-x: auto;
+}
+
+.cloud-table-wrapper table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.cloud-table-wrapper th {
+    text-align: left;
+    padding: 15px 24px;
+    background: #f8fafc;
+    color: #64748b;
+    font-size: 12px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.cloud-table-wrapper td {
+    padding: 16px 24px;
+    border-top: 1px solid #eef2f7;
+    color: #334155;
+    font-size: 14px;
+}
+
+.cloud-table-wrapper tbody tr {
+    transition: background 0.15s ease;
+}
+
+.cloud-table-wrapper tbody tr:hover {
+    background: #f8fafc;
+}
+
+.service-cell {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-weight: 600;
+    color: #1e293b;
+}
+
+.service-mini-icon {
+    width: 30px;
+    height: 30px;
+    border-radius: 8px;
+    background: #eef2ff;
+    color: #4f46e5;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.month-badge {
+    display: inline-block;
+    background: #f1f5f9;
+    color: #475569;
+    padding: 5px 10px;
+    border-radius: 7px;
+    font-size: 12px;
+    font-weight: 600;
+}
+
+.cost-cell {
+    font-weight: 700;
+    color: #0f172a !important;
+}
+
+/* ==========================================
+   LOADING
+========================================== */
+
+.cloud-costs-loading {
+    min-height: 500px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    color: #64748b;
+}
+
+.cloud-costs-loading h2 {
+    margin: 18px 0 5px;
+    color: #334155;
+    font-size: 20px;
+}
+
+.cloud-costs-loading p {
+    margin: 0;
+    font-size: 14px;
+}
+
+.cloud-costs-spin {
+    color: #4f46e5;
+    animation: cloudSpin 1s linear infinite;
+}
+
+@keyframes cloudSpin {
+    from {
+        transform: rotate(0deg);
+    }
+
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+/* ==========================================
+   ERROR
+========================================== */
+
+.cloud-costs-error {
+    background: white;
+    border: 1px solid #fecaca;
+    border-radius: 16px;
+    padding: 24px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    box-shadow: 0 3px 14px rgba(15, 23, 42, 0.04);
+}
+
+.error-icon {
+    width: 50px;
+    height: 50px;
+    border-radius: 12px;
+    background: #fef2f2;
+    color: #dc2626;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.cloud-costs-error h2 {
+    margin: 0;
+    color: #991b1b;
+    font-size: 18px;
+}
+
+.cloud-costs-error p {
+    margin: 5px 0 0;
+    color: #b91c1c;
+}
+
+/* ==========================================
+   RESPONSIVE
+========================================== */
+
+@media (max-width: 1100px) {
+
+    .cloud-summary-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+}
+
+@media (max-width: 800px) {
+
+    .cloud-costs-page {
+        padding: 25px 18px;
+    }
+
+    .cloud-costs-header {
+        flex-direction: column;
+        gap: 18px;
+    }
+
+    .cloud-charts-grid {
+        grid-template-columns: 1fr;
+    }
+
+}
+
+@media (max-width: 550px) {
+
+    .cloud-summary-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .cloud-costs-header h1 {
+        font-size: 27px;
+    }
+
+}

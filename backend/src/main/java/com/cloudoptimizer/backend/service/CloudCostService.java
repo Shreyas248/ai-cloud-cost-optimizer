@@ -21,54 +21,67 @@ public class CloudCostService {
         this.repository = repository;
     }
 
-    // ==========================================
+    // =========================================================
     // GET ALL COSTS
-    // ==========================================
+    // =========================================================
 
-    public List<CloudCost> getAllCosts() {
-        return repository.findAll();
+    public List<CloudCost> getAllCosts(Long userId) {
+
+        return repository.findByUserId(userId);
     }
 
-    // ==========================================
+    // =========================================================
     // GET BY SERVICE
-    // ==========================================
+    // =========================================================
 
     public List<CloudCost> getByService(
+            Long userId,
             String service
     ) {
-        return repository.findByService(service);
+
+        return repository.findByUserIdAndService(
+                userId,
+                service
+        );
     }
 
-    // ==========================================
+    // =========================================================
     // GET BY MONTH
-    // ==========================================
+    // =========================================================
 
     public List<CloudCost> getByMonth(
+            Long userId,
             String month
     ) {
-        return repository.findByMonth(month);
+
+        return repository.findByUserIdAndMonth(
+                userId,
+                month
+        );
     }
 
-    // ==========================================
+    // =========================================================
     // TOTAL COST
-    // ==========================================
+    // =========================================================
 
-    public double getTotalCost() {
+    public double getTotalCost(Long userId) {
 
-        return repository.findAll()
+        return repository.findByUserId(userId)
                 .stream()
                 .mapToDouble(CloudCost::getCost)
                 .sum();
     }
 
-    // ==========================================
+    // =========================================================
     // COST BY SERVICE
-    // ==========================================
+    // =========================================================
 
-    public List<Map<String, Object>> getCostByService() {
+    public List<Map<String, Object>> getCostByService(
+            Long userId
+    ) {
 
         List<CloudCost> costs =
-                repository.findAll();
+                repository.findByUserId(userId);
 
         Map<String, Double> serviceTotals =
                 new HashMap<>();
@@ -102,14 +115,16 @@ public class CloudCostService {
         return result;
     }
 
-    // ==========================================
+    // =========================================================
     // COST BY MONTH
-    // ==========================================
+    // =========================================================
 
-    public List<Map<String, Object>> getCostByMonth() {
+    public List<Map<String, Object>> getCostByMonth(
+            Long userId
+    ) {
 
         List<CloudCost> costs =
-                repository.findAll();
+                repository.findByUserId(userId);
 
         Map<String, Double> monthTotals =
                 new HashMap<>();
@@ -143,14 +158,16 @@ public class CloudCostService {
         return result;
     }
 
-    // ==========================================
+    // =========================================================
     // SUMMARY
-    // ==========================================
+    // =========================================================
 
-    public Map<String, Object> getSummary() {
+    public Map<String, Object> getSummary(
+            Long userId
+    ) {
 
         List<CloudCost> costs =
-                repository.findAll();
+                repository.findByUserId(userId);
 
         double totalCost = 0;
 
